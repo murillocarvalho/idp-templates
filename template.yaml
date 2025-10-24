@@ -1,0 +1,81 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: salesforce-template
+  title: Salesforce Project Template
+  description: Template para criar projetos Salesforce
+spec:
+  owner: platform-team
+  type: service
+  
+  parameters:
+    - title: Informações do Projeto
+      required:
+        - name
+        - description
+      properties:
+        name:
+          title: Nome do Projeto
+          type: string
+          description: Nome único do projeto
+        description:
+          title: Descrição
+          type: string
+          description: Breve descrição do projeto
+        owner:
+          title: Proprietário
+          type: string
+          description: Equipe ou pessoa responsável
+          default: platform-team
+
+  steps:
+    - id: fetch-base
+      name: Fetch Base
+      action: fetch:template
+      input:
+        url: ./content
+        values:
+          name: ${{ parameters.name }}
+          description: ${{ parameters.description }}
+          owner: ${{ parameters.owner }}
+
+    - id: publish
+      name: Publish
+      action: publish:github
+      input:
+        allowedHosts: ['github.com']
+        description: ${{ parameters.description }}
+        repoUrl: github.com?repo=${{ parameters.name }}&owner=${{ parameters.owner }}
+
+    - id: catalog-write
+      name: Write Catalog Entity
+      action: catalog:write
+      input:
+        filePath: catalog/${{ parameters.name }}.yaml
+        entity:
+          apiVersion: backstage.io/v1alpha1
+          kind: Component
+          metadata:
+            name: ${{ parameters.name }}
+            description: ${{ parameters.description }}
+            annotations:
+              github.com/project-slug: ${{ parameters.owner }}/${{ parameters.name }}
+          spec:
+            type: service
+            lifecycle: experimental
+            owner: ${{ parameters.owner }}
+
+    - id: register
+      name: Register
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: '/catalog-info.yaml'
+
+  output:
+    links:
+      - title: Repository
+        url: ${{ steps.publish.output.remoteUrl }}
+      - title: Open in catalog
+        icon: catalog
+        entityRef: ${{ steps.register.output.entityRef }}
