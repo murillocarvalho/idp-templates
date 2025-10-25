@@ -4,6 +4,8 @@ metadata:
   name: salesforce-template
   title: Salesforce Project Template
   description: Template para criar projetos Salesforce
+  annotations:
+    github.com/project-repo: murillohpcarvalho/idp-templates
 spec:
   owner: platform-team
   type: service
@@ -38,6 +40,7 @@ spec:
           name: ${{ parameters.name }}
           description: ${{ parameters.description }}
           owner: ${{ parameters.owner }}
+          templateRepo: ${{ parameters.templateRepo }}
 
     - id: publish
       name: Publish
