@@ -39,7 +39,7 @@ spec:
         url: 'proxy/github-api/clone-and-create'
         body:
           repo_url: 'https://github.com/murillocarvalho/idp-templates.git'
-          new_name: 'meu-novo-repo-4'
+          new_name: ${{ parameters.name }}
 
 
     # - id: fetch-base
