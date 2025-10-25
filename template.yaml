@@ -5,7 +5,7 @@ metadata:
   title: Salesforce Project Template
   description: Template para criar projetos Salesforce
   annotations:
-    github.com/project-repo: murillohpcarvalho/idp-templates
+    project-repo: murillohpcarvalho/idp-templates
 spec:
   owner: platform-team
   type: service
@@ -31,24 +31,35 @@ spec:
           default: platform-team
 
   steps:
-    - id: fetch-base
-      name: Fetch Base
-      action: fetch:template
+    - id: create-repo
+      name: Create Repo
+      action: http:backstage:request
       input:
-        url: ./content
-        values:
-          name: ${{ parameters.name }}
-          description: ${{ parameters.description }}
-          owner: ${{ parameters.owner }}
-          templateRepo: ${{ parameters.templateRepo }}
+        method: POST
+        url: 'proxy/github-api/clone-and-create'
+        body:
+          repo_url: 'https://github.com/murillocarvalho/idp-templates.git'
+          new_name: 'meu-novo-repo-4'
 
-    - id: publish
-      name: Publish
-      action: publish:github
-      input:
-        allowedHosts: ['github.com']
-        description: ${{ parameters.description }}
-        repoUrl: github.com?repo=${{ parameters.name }}&owner=${{ parameters.owner }}
+
+    # - id: fetch-base
+    #   name: Fetch Base
+    #   action: fetch:template
+    #   input:
+    #     url: ./content
+    #     values:
+    #       name: ${{ parameters.name }}
+    #       description: ${{ parameters.description }}
+    #       owner: ${{ parameters.owner }}
+    #       templateRepo: ${{ parameters.templateRepo }}
+
+    # - id: publish
+    #   name: Publish
+    #   action: publish:github
+    #   input:
+    #     allowedHosts: ['github.com']
+    #     description: ${{ parameters.description }}
+    #     repoUrl: github.com?repo=${{ parameters.name }}&owner=${{ parameters.owner }}
 
     - id: catalog-write
       name: Write Catalog Entity
