@@ -36,7 +36,7 @@ spec:
       action: http:backstage:request
       input:
         method: POST
-        path: 'proxy/github-api/clone-and-create'
+        path: 'proxy/github-api/github/clone-and-create'
         body:
           repo_url: 'https://github.com/murillocarvalho/idp-templates.git'
           new_name: ${{ parameters.name }}
