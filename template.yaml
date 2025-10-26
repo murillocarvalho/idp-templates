@@ -7,7 +7,7 @@ metadata:
   annotations:
     project-repo: murillohpcarvalho/idp-templates
 spec:
-  owner: platform-team
+  owner: admins
   type: service
   
   parameters:
