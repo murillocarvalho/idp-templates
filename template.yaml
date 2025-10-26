@@ -37,6 +37,8 @@ spec:
       input:
         method: POST
         path: 'proxy/github-api/github/clone-and-create'
+        headers:
+          'Content-Type': 'application/json'
         body:
           repo_url: 'https://github.com/murillocarvalho/idp-templates.git'
           new_name: ${{ parameters.name }}
